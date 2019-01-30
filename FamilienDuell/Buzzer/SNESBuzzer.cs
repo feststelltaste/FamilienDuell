@@ -24,7 +24,13 @@ namespace FamilienDuell
         internal SNESBuzzer()
         {
             var deviceCount = 0;
-            foreach (var d in HidDevices.Enumerate(121)) //Vendor_ID 0x0079
+
+            //var devices = HidDevices.Enumerate(); //liste alle HiDDevices auf
+
+            string snesUsbControllerVendorId = "0E8F";
+            int vendorId = int.Parse(snesUsbControllerVendorId, System.Globalization.NumberStyles.HexNumber);
+
+            foreach (var d in HidDevices.Enumerate(vendorId))
             {
                 if (deviceCount == 0)
                 {
@@ -49,7 +55,7 @@ namespace FamilienDuell
         {
             if (data.Status == HidDeviceData.ReadStatus.Success)
             {
-                var button = (int)data.Data[6];
+                var button = (int)data.Data[5];
                 if (button == 47 /*A*/ || button == 79 /*B*/ || button == 143 /*Y*/ || button == 31 /*X*/)
                 {
                     OnBuzzered(1);
@@ -63,7 +69,7 @@ namespace FamilienDuell
         {
             if (data.Status == HidDeviceData.ReadStatus.Success)
             {
-                var button = (int)data.Data[6];
+                var button = (int)data.Data[5];
                 if (button == 47 /*A*/ || button == 79 /*B*/ || button == 143 /*Y*/ || button == 31 /*X*/)
                 {
                     OnBuzzered(2);
